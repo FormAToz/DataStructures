@@ -12,14 +12,10 @@ import java.util.stream.Collectors;
 
 public class Test extends TestCase {
     private SingleLinkedList singleLinkedList;
-    private DoubleLinkedList doubleLL_headInsert;
-    private DoubleLinkedList doubleLL_tailInsert;
+    private DoubleLinkedList doubleLinkedListHeadInsert;
+    private DoubleLinkedList doubleLinkedListTailInsert;
     private BinaryTree bTree;
     private SuffixTree sfxTree;
-    private List expected;
-    private List actual;
-    private String expString;
-    private String actString;
 
     @Override
     protected void setUp() throws Exception {
@@ -30,15 +26,15 @@ public class Test extends TestCase {
         singleLinkedList.push(new ListItem("Three"));
 
         // double_linked_list
-        doubleLL_headInsert = new DoubleLinkedList();
-        doubleLL_headInsert.addToHead(new double_linked_list.ListItem("1"));
-        doubleLL_headInsert.addToHead(new double_linked_list.ListItem("2"));
-        doubleLL_headInsert.addToHead(new double_linked_list.ListItem("3"));
+        doubleLinkedListHeadInsert = new DoubleLinkedList();
+        doubleLinkedListHeadInsert.addToHead(new double_linked_list.ListItem("1"));
+        doubleLinkedListHeadInsert.addToHead(new double_linked_list.ListItem("2"));
+        doubleLinkedListHeadInsert.addToHead(new double_linked_list.ListItem("3"));
 
-        doubleLL_tailInsert = new DoubleLinkedList();
-        doubleLL_tailInsert.addToTail(new double_linked_list.ListItem("1"));
-        doubleLL_tailInsert.addToTail(new double_linked_list.ListItem("2"));
-        doubleLL_tailInsert.addToTail(new double_linked_list.ListItem("3"));
+        doubleLinkedListTailInsert = new DoubleLinkedList();
+        doubleLinkedListTailInsert.addToTail(new double_linked_list.ListItem("1"));
+        doubleLinkedListTailInsert.addToTail(new double_linked_list.ListItem("2"));
+        doubleLinkedListTailInsert.addToTail(new double_linked_list.ListItem("3"));
 
         /* binary_tree:
         *       C
@@ -62,55 +58,50 @@ public class Test extends TestCase {
     // tests single_linked_list
     public void testRemoveLast() {
         singleLinkedList.removeLast();
-        expected = Arrays.asList("Three", "Two");
-        actual = singleLinkedList.getAllItems();
-        assertTrue("Verify failed! Expected: " + expected.toString() + "\n Actual: " + actual.toString(),
-                expected.equals(actual));
+        List<String> expected = Arrays.asList("Three", "Two");
+        List<String> actual = singleLinkedList.getAllItems();
+        assertEquals(expected, actual);
     }
 
     // tests double_linked_list
     public void testInsertToHead() {
-        expected = Arrays.asList("3", "2", "1");
-        actual = doubleLL_headInsert.getAllElemForward();
-        assertTrue("Verify failed! Expected: " + expected.toString() + "\n Actual: " + actual.toString(),
-                expected.equals(actual));
+        List<String> expected = Arrays.asList("3", "2", "1");
+        List<String> actual = doubleLinkedListHeadInsert.getAllElemForward();
+        assertEquals(expected, actual);
     }
 
     public void testInsertToTail() {
-        expected = Arrays.asList("1", "2", "3");
-        actual = doubleLL_tailInsert.getAllElemForward();
-        assertTrue("Verify failed! Expected: " + expected.toString() + "\n Actual: " + actual.toString(),
-                expected.equals(actual));
+        List<String> expected = Arrays.asList("1", "2", "3");
+        List<String> actual = doubleLinkedListTailInsert.getAllElemForward();
+        assertEquals(expected, actual);
     }
 
     public void testRemoveHeadElement() {
-        doubleLL_tailInsert.removeHeadElement();
-        expected = Arrays.asList("2", "3");
-        actual = doubleLL_tailInsert.getAllElemForward();
-        assertTrue("Verify failed! Expected: " + expected.toString() + "\n Actual: " + actual.toString(),
-                expected.equals(actual));
+        doubleLinkedListTailInsert.removeHeadElement();
+        List<String> expected = Arrays.asList("2", "3");
+        List<String> actual = doubleLinkedListTailInsert.getAllElemForward();
+        assertEquals(expected, actual);
     }
 
     public void testRemoveTailElement() {
-        doubleLL_tailInsert.removeTailElement();
-        expected = Arrays.asList("1", "2");
-        actual = doubleLL_tailInsert.getAllElemForward();
-        assertTrue("Verify failed! Expected: " + expected.toString() + "\n Actual: " + actual.toString(),
-                expected.equals(actual));
+        doubleLinkedListTailInsert.removeTailElement();
+        List<String> expected = Arrays.asList("1", "2");
+        List<String> actual = doubleLinkedListTailInsert.getAllElemForward();
+        assertEquals(expected, actual);
     }
 
     public void testPopTailElement() {
-        double_linked_list.ListItem item = doubleLL_tailInsert.popTailElement();
-        expString = "3";
-        actString = item.toString();
-        assertEquals(expString, actString);
+        double_linked_list.ListItem item = doubleLinkedListTailInsert.popTailElement();
+        String expected = "3";
+        String actual = item.toString();
+        assertEquals(expected, actual);
     }
 
     public void testPopHeadElement() {
-        double_linked_list.ListItem item = doubleLL_tailInsert.popHeadElement();
-        expString = "1";
-        actString = item.toString();
-        assertEquals(expString, actString);
+        double_linked_list.ListItem item = doubleLinkedListTailInsert.popHeadElement();
+        String expected = "1";
+        String actual = item.toString();
+        assertEquals(expected, actual);
     }
 
     // tests binary_tree
@@ -121,21 +112,19 @@ public class Test extends TestCase {
     }
 
     public void testFindNodes() {
-        expected = Arrays.asList("C", "C", "C");
-        actual = bTree.searchNodes("C")
+        List<String> expected = Arrays.asList("C", "C", "C");
+        List<String> actual = bTree.searchNodes("C")
                 .stream()
-                .map(el -> el.toString())
+                .map(Node::toString)
                 .collect(Collectors.toList());
-        assertTrue("Verify failed! Expected: " + expected.toString() + "\n Actual: " + actual.toString(),
-                expected.equals(actual));
+        assertEquals(expected, actual);
     }
 
     // tests suffix_tree
     public void testSuffixTreeSearch() {
         sfxTree = new SuffixTree("arttppasdsda"); //positions from 0 to n
-        expected = Arrays.asList(0, 6, 11);
-        actual = sfxTree.search("a");
-        assertTrue("Verify failed! Expected: " + expected.toString() + "\n Actual: " + actual.toString(),
-                expected.equals(actual));
+        List<Integer> expected = Arrays.asList(0, 6, 11);
+        List<Integer> actual = sfxTree.search("a");
+        assertEquals(expected, actual);
     }
 }
